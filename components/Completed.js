@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { Checkbox } from "react-native-paper";
 
-const Home = () => {
+const Completed = () => {
   return (
     <View style={styles.container}>
       <Image
@@ -17,8 +17,7 @@ const Home = () => {
         source={require("../assets/bars-3-bottom-left.png")}
       />
       <View style={styles.groupText}>
-        <Text style={styles.text1}>Good morning Om,</Text>
-        <Text style={styles.text1}>It’s Wednesday, Jan 20 - 5 tasks</Text>
+        <Text style={styles.text1}>Completed</Text>
       </View>
 
       <View style={styles.groupTI}>
@@ -32,12 +31,12 @@ const Home = () => {
         <View style={styles.groupCheck}>
           <View style={styles.groupCheck1}>
             <input type="checkbox" style={styles.checkbox} />
-            <Text style={styles.textCheck}>Meditate</Text>
+            <Text style={styles.textCheck}>Pratice deep work</Text>
           </View>
 
           <View style={styles.groupCheck2}>
             <View style={styles.dayView}>
-              <Text style={styles.textDay}>Jan 28</Text>
+              <Text style={styles.textDay}>Express</Text>
             </View>
             <Image
               style={styles.imgVector}
@@ -49,7 +48,7 @@ const Home = () => {
         <View style={styles.groupCheck}>
           <View style={styles.groupCheck1}>
             <input type="checkbox" style={styles.checkbox} />
-            <Text style={styles.textCheck}>Go for a walk</Text>
+            <Text style={styles.textCheck}>Drink 8 glasses of water</Text>
           </View>
 
           <View style={styles.groupCheck2}>
@@ -165,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Completed;

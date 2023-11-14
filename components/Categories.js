@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { Checkbox } from "react-native-paper";
 
-const Home = () => {
+const Categories = () => {
   return (
     <View style={styles.container}>
       <Image
@@ -17,27 +17,22 @@ const Home = () => {
         source={require("../assets/bars-3-bottom-left.png")}
       />
       <View style={styles.groupText}>
-        <Text style={styles.text1}>Good morning Om,</Text>
-        <Text style={styles.text1}>It’s Wednesday, Jan 20 - 5 tasks</Text>
-      </View>
-
-      <View style={styles.groupTI}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Create a new task"
-        ></TextInput>
+        <Text style={styles.text1}>Categories</Text>
       </View>
 
       <ScrollView>
         <View style={styles.groupCheck}>
           <View style={styles.groupCheck1}>
-            <input type="checkbox" style={styles.checkbox} />
-            <Text style={styles.textCheck}>Meditate</Text>
+            <Image
+              style={styles.iconCa}
+              source={require("../assets/iconCa1.png")}
+            />
+            <Text style={styles.textCheck}>Weekly goals</Text>
           </View>
 
           <View style={styles.groupCheck2}>
             <View style={styles.dayView}>
-              <Text style={styles.textDay}>Jan 28</Text>
+              <Text style={styles.textDay}>1</Text>
             </View>
             <Image
               style={styles.imgVector}
@@ -48,13 +43,36 @@ const Home = () => {
 
         <View style={styles.groupCheck}>
           <View style={styles.groupCheck1}>
-            <input type="checkbox" style={styles.checkbox} />
-            <Text style={styles.textCheck}>Go for a walk</Text>
+            <Image
+              style={styles.iconCa}
+              source={require("../assets/iconCa2.png")}
+            />
+            <Text style={styles.textCheck}>Personal</Text>
           </View>
 
           <View style={styles.groupCheck2}>
             <View style={styles.dayView}>
-              <Text style={styles.textDay}>Today</Text>
+              <Text style={styles.textDay}>2</Text>
+            </View>
+            <Image
+              style={styles.imgVector}
+              source={require("../assets/Vector.png")}
+            />
+          </View>
+        </View>
+
+        <View style={styles.groupCheck}>
+          <View style={styles.groupCheck1}>
+            <Image
+              style={styles.iconCa}
+              source={require("../assets/iconCa3.png")}
+            />
+            <Text style={styles.textCheck}>Study</Text>
+          </View>
+
+          <View style={styles.groupCheck2}>
+            <View style={styles.dayView}>
+              <Text style={styles.textDay}>3</Text>
             </View>
             <Image
               style={styles.imgVector}
@@ -163,6 +181,12 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 5,
   },
+  iconCa: {
+    width: "15px",
+    height: "15px",
+    marginTop: 5,
+    marginLeft: 10,
+  },
 });
 
-export default Home;
+export default Categories;
