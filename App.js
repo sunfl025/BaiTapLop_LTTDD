@@ -75,13 +75,14 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName={"Register"}
+        initialRouteName={"Login"}
       >
         {/* <Stack.Screen name="BottomTab" component={HomePage}></Stack.Screen> */}
         <Stack.Screen name="Blossom" component={Blossom}></Stack.Screen>
         <Stack.Screen name="Login" component={Login}></Stack.Screen>
-        <Stack.Screen name="Home" component={HomePage}></Stack.Screen>
         <Stack.Screen name="Register" component={Register}></Stack.Screen>
+        <Stack.Screen name="Home" component={HomePage}></Stack.Screen>
+        
       </Stack.Navigator>
     </NavigationContainer>
   

@@ -13,43 +13,82 @@ import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 
 const Login = ({ navigation }) => {
-
-  const [data,setData] = useState([]);
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
+  const [data, setData] = useState([]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const isFocused = useIsFocused();
+  // const getData = async () => {
+  //   try {
+  //     const res = await fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User")
+  //     const json = await res.json();
+  //     setData(json)
+  //     console.log(data)
+
+  //   } catch (error) {
+  //     console.log(error)
+
+  //   }
+  // }
+  // const getUser = () => {
+  //   fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User", {
+  //     method: "GET",
+  //     headers: { "content-type": "application/json" },
+  //   })
+  //     .then((res) => {
+  //       if (res.ok) {
+  //         return res.json();
+  //       }
+  //       // handle error
+  //     })
+  //     .then((user) => {
+  //       // Do something with the list of tasks
+  //       setData(user);
+  //     })
+  //     .catch((error) => {
+  //       // handle error
+  //     });
+  // };
   const getData = async () => {
     try {
-      const res = await fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User")
-      const json = await res.json();
-      setData(json)
-      
+      const response = await fetch('https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User',{
+        method: "GET",
+        headers: { "content-type": "application/json" },
+      });
+      const json = await response.json();
+      setData(json);
+
      
     } catch (error) {
-      
-    }
-  }
+      console.error(error);
+    } 
+  };
+  useEffect(() => {
+    getData();
+  }, [isFocused]);
+      console.log(data);
 
-  useEffect(()=>{
-    getData()
-  },[isFocused])
-
-  
   return (
-    
     <View style={styles.container}>
       <Text style={styles.text1}>Welcome Back</Text>
       <View style={styles.group}>
         <Text style={styles.text2}>E-MAIL</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input} value={email} onChangeText={(email)=> setEmail(email)}></TextInput>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={(email) => setEmail(email)}
+          ></TextInput>
         </View>
       </View>
 
       <View style={styles.group}>
         <Text style={styles.text2}>PASSWORD</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input2} value={password} onChangeText={(password)=> setPassword(password)}></TextInput>
+          <TextInput
+            style={styles.input2}
+            value={password}
+            onChangeText={(password) => setPassword(password)}
+          ></TextInput>
           <Image style={styles.icon1} source={require("../assets/icon1.png")} />
         </View>
       </View>
@@ -61,17 +100,24 @@ const Login = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          data.map((item)=> {
-            console.log(item)
-             if(item.email == email && item.password == password)
-             {
-               navigation.navigate('Home')
-               
-             }
-             else{
-              //  alert("Thông tin không chính xác")
-             }
-          })
+          data
+            .filter((item) => {
+              return item.email == email && item.password == password;
+            })
+            .map((item) => {
+                navigation.navigate('Home',item)
+            });
+          //           data.map((item)=> {
+          //             console.log(item)
+          //              if(item.email == email && item.password == password)
+          //              {
+          //                navigation.navigate('Home',item)
+
+          //              }
+          //              else{
+          //               //  alert("Thông tin không chính xác")
+          //              }
+          // })
         }}
       >
         <Text style={styles.textbutton}>LOG IN</Text>

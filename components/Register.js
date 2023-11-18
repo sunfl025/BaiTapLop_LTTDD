@@ -34,6 +34,7 @@ const Register = ({ navigation }) => {
         }),
        
       });
+
       
      
     } catch (error) {
@@ -41,9 +42,9 @@ const Register = ({ navigation }) => {
     } 
   };
 
-  useEffect(()=> {
-    save()
-  },[isFocused])    
+  // useEffect(()=> {
+  //   save()
+  // },[isFocused])    
  
  
   return (
