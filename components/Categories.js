@@ -8,8 +8,10 @@ import {
 } from "react-native";
 import React from "react";
 import { Checkbox } from "react-native-paper";
-
+import { useDispatch, useSelector } from 'react-redux';
 const Categories = () => {
+  const userStore = useSelector(state => state)
+  console.log("from categories",userStore)
   return (
     <View style={styles.container}>
       <Image

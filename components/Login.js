@@ -7,24 +7,116 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from "../redux/userStore";
 const Login = ({ navigation }) => {
+  const [data, setData] = useState([]);
+  const [email, setEmail] = useState("Jamel.Feest@gmail.com");
+  const [password, setPassword] = useState("Flwr3n_d0A5bwE2");
+  const isFocused = useIsFocused();
+  const userStore = useSelector(state => state);
+  const dispatch = useDispatch();
+
+  // const getData = async () => {
+  //   try {
+  //     const res = await fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User")
+  //     const json = await res.json();
+  //     setData(json)
+  //     console.log(data)
+
+  //   } catch (error) {
+  //     console.log(error)
+
+  //   }
+  // }
+  // const getUser = () => {
+  //   fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User", {
+  //     method: "GET",
+  //     headers: { "content-type": "application/json" },
+  //   })
+  //     .then((res) => {
+  //       if (res.ok) {
+  //         return res.json();
+  //       }
+  //       // handle error
+  //     })
+  //     .then((user) => {
+  //       // Do something with the list of tasks
+  //       setData(user);
+  //     })
+  //     .catch((error) => {
+  //       // handle error
+  //     });
+  // };
+  const login = async () =>{
+    const response = await fetch('https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User',{
+        method: "GET",
+        headers: { "content-type": "application/json" },
+      });
+      const json = await response.json();
+      setData(json);
+      json.map((item)=> {
+                     
+        if(item.email == email && item.password == password)
+        {
+         
+          // navigation.push('Home',item)
+          // localStorage.setItem("user",JSON.stringify(item))
+          dispatch(setUser(item))
+          navigation.navigate("Home")
+
+        }
+        else{
+         //  alert("Thông tin không chính xác")
+        }
+})
+  
+  }
+  const getData = async () => {
+    try {
+      const response = await fetch('https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User',{
+        method: "GET",
+        headers: { "content-type": "application/json" },
+      });
+      const json = await response.json();
+      setData(json);
+
+     
+    } catch (error) {
+      console.error(error);
+    } 
+  };
+  useEffect(() => {
+    getData();
+  }, [isFocused]);
+      // console.log(data);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text1}>Welcome Back</Text>
       <View style={styles.group}>
         <Text style={styles.text2}>E-MAIL</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input}></TextInput>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={(email) => setEmail(email)}
+          ></TextInput>
         </View>
       </View>
 
       <View style={styles.group}>
         <Text style={styles.text2}>PASSWORD</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input2}></TextInput>
+          <TextInput
+            style={styles.input2}
+            value={password}
+            onChangeText={(password) => setPassword(password)}
+          ></TextInput>
           <Image style={styles.icon1} source={require("../assets/icon1.png")} />
         </View>
       </View>
@@ -35,7 +127,7 @@ const Login = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Home")}
+        onPress={ ()=> {login()}}
       >
         <Text style={styles.textbutton}>LOG IN</Text>
       </TouchableOpacity>

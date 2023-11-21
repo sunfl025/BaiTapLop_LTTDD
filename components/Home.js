@@ -5,20 +5,48 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox } from "react-native-paper";
-
-const Home = () => {
+import { useIsFocused } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+const Home = ({ route, navigation }) => {
+  // const [data,setData] = useState([]);
+  const [task, setTask] = useState([]);
+  const isFocused = useIsFocused();
+  // const routeState = useRoute();
+  // const data = route.params;
+  const userStore = useSelector((state) => state);
+  console.log("userStore", userStore);
+  const getTask = async (id) => {
+    try {
+      const res = await fetch(
+        "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" + id + "/Task"
+      );
+      const json = await res.json();
+      setTask(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getTask(userStore.authen.user.id);
+  }, [isFocused]);
   return (
     <View style={styles.container}>
-      <Image
+      {/* <Image
         style={styles.bars}
         source={require("../assets/bars-3-bottom-left.png")}
-      />
+      /> */}
       <View style={styles.groupText}>
-        <Text style={styles.text1}>Good morning Om,</Text>
-        <Text style={styles.text1}>It’s Wednesday, Jan 20 - 5 tasks</Text>
+        <Text style={styles.text1}>
+          Good morning {userStore.authen.user.name},
+        </Text>
+        <Text style={styles.text1}>
+          It’s {Date()} - {task.length} tasks
+        </Text>
       </View>
 
       <View style={styles.groupTI}>
@@ -26,59 +54,33 @@ const Home = () => {
           style={styles.textInput}
           placeholder="Create a new task"
         ></TextInput>
+        <TouchableOpacity style={styles.buttonInput}>
+          <Text style={styles.textButtonInput}>Add</Text>
+        </TouchableOpacity>
       </View>
 
       <ScrollView>
-        <View style={styles.groupCheck}>
-          <View style={styles.groupCheck1}>
-            <input type="checkbox" style={styles.checkbox} />
-            <Text style={styles.textCheck}>Meditate</Text>
-          </View>
+        {task.map((item) => {
+          // console.log(item)
+          return (
+            <View style={styles.groupCheck}>
+              <View style={styles.groupCheck1}>
+                <input type="checkbox" style={styles.checkbox} />
+                <Text style={styles.textCheck}>{item.name}</Text>
+              </View>
 
-          <View style={styles.groupCheck2}>
-            <View style={styles.dayView}>
-              <Text style={styles.textDay}>Jan 28</Text>
+              <View style={styles.groupCheck2}>
+                <View style={styles.dayView}>
+                  <Text style={styles.textDay}>Jan 28</Text>
+                </View>
+                <Image
+                  style={styles.imgVector}
+                  source={require("../assets/Vector.png")}
+                />
+              </View>
             </View>
-            <Image
-              style={styles.imgVector}
-              source={require("../assets/Vector.png")}
-            />
-          </View>
-        </View>
-
-        <View style={styles.groupCheck}>
-          <View style={styles.groupCheck1}>
-            <input type="checkbox" style={styles.checkbox} />
-            <Text style={styles.textCheck}>Go for a walk</Text>
-          </View>
-
-          <View style={styles.groupCheck2}>
-            <View style={styles.dayView}>
-              <Text style={styles.textDay}>Today</Text>
-            </View>
-            <Image
-              style={styles.imgVector}
-              source={require("../assets/Vector.png")}
-            />
-          </View>
-        </View>
-
-        <View style={styles.groupCheck}>
-          <View style={styles.groupCheck1}>
-            <input type="checkbox" style={styles.checkbox} />
-            <Text style={styles.textCheck}>Go for a walk</Text>
-          </View>
-
-          <View style={styles.groupCheck2}>
-            <View style={styles.dayView}>
-              <Text style={styles.textDay}>Today</Text>
-            </View>
-            <Image
-              style={styles.imgVector}
-              source={require("../assets/Vector.png")}
-            />
-          </View>
-        </View>
+          );
+        })}
       </ScrollView>
     </View>
   );
@@ -116,17 +118,31 @@ const styles = StyleSheet.create({
     borderRadius: "20px",
     marginLeft: "10px",
     alignItems: "center",
-    marginTop: "25px",
-    marginBottom: "15px",
+    // marginTop: "25px",
+    // marginBottom: "15px",
+    flexDirection: "row",
   },
   textInput: {
-    width: "350px",
+    width: "290px",
     height: "60px",
     outlineStyle: "none",
-    borderRadius: "20px",
+
     color: "#838288",
     fontSize: "12px",
     lineHeight: "16.37px",
+    borderRightColor: "#838288",
+    borderRightWidth: "1px",
+  },
+  buttonInput: {
+    width: "60px",
+    height: "60px",
+  },
+  textButtonInput: {
+    color: "#838288",
+    fontSize: "12px",
+    lineHeight: "16.37px",
+    textAlign: "center",
+    marginTop: "20px",
   },
   checkbox: {
     width: 30,

@@ -7,27 +7,75 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React,{useEffect, useState} from "react";
+import { useIsFocused } from "@react-navigation/native";
 
-const Register = ({ navigation }) => {
+const Register = ({route, navigation }) => {
+  const [name,setName] = useState("");
+  const [password,setPassword] = useState("");
+  const [email,setEmail] = useState("");
+  const isFocused = useIsFocused();
+console.log(route)
+
+  const save = () => {
+    try {
+      const response =  fetch('https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User',{
+        method:"POST",
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+      
+          "email":email,
+          "password":password,
+           
+           
+        }),
+       
+      });
+
+      
+     
+    } catch (error) {
+      console.error(error);
+    } 
+  };
+
+  // useEffect(()=> {
+  //   save()
+  // },[isFocused])    
+ 
+ 
   return (
+    
     <View style={styles.container}>
       <View style={styles.groupText}>
         <Text style={styles.text1}>Welcome to Blossom!</Text>
         <Text style={styles.text1}>Your journey starts here</Text>
       </View>
 
+
+      {/* <View style={styles.group}>
+        <Text style={styles.text2}>NAME</Text>
+        <View style={styles.group2}>
+          <TextInput style={styles.input} placeholder="User name" value={name} onChangeText={(name)=> setName(name)}></TextInput>
+        </View>
+      </View> */}
+
       <View style={styles.group}>
         <Text style={styles.text2}>E-MAIL</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input}></TextInput>
+          <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={(email)=> setEmail(email)}></TextInput>
         </View>
       </View>
+
+
 
       <View style={styles.group}>
         <Text style={styles.text2}>PASSWORD</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input2}></TextInput>
+          <TextInput style={styles.input2} placeholder="Password" value={password} onChangeText={(password)=> setPassword(password)}></TextInput>
           <Image style={styles.icon1} source={require("../assets/icon1.png")} />
         </View>
       </View>
@@ -35,13 +83,13 @@ const Register = ({ navigation }) => {
       <View style={styles.group}>
         <Text style={styles.text2}>CONFIRM PASSWORD</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input2}></TextInput>
+          <TextInput style={styles.input2} placeholder="Re-password"></TextInput>
           <Image style={styles.icon1} source={require("../assets/icon1.png")} />
         </View>
       </View>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("Login")}
+        onPress={() => {save(),navigation.navigate('Login')}}
         style={styles.button}
       >
         <Text style={styles.textbutton}>Register</Text>
@@ -87,6 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: "29px",
 
     outlineStyle: "none",
+    padding:20
   },
   group2: {
     flexDirection: "row",
@@ -108,6 +157,7 @@ const styles = StyleSheet.create({
     borderRadius: "29px",
     outlineStyle: "none",
     textAlign: "justify",
+    padding:20
     //backgroundColor: "red",
   },
   text3: {

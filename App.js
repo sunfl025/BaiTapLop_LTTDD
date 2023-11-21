@@ -11,14 +11,20 @@ import Blossom from "./components/Blossom";
 import Register from "./components/Register";
 import Completed from "./components/Completed";
 import Categories from "./components/Categories";
-
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 const Stack = createNativeStackNavigator();
 // const Tab = createMaterialBottomTabNavigator()
 const Tab = createBottomTabNavigator();
-function HomePage() {
+function HomePage({ route, navigation }) {
+
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      initialRouteName="HomeTab"
+      screenOptions={{ headerShown: false }}
+    >
       <Tab.Screen
+        {...route}
         options={{
           tabBarIcon: () => (
             <Image
@@ -27,7 +33,7 @@ function HomePage() {
             />
           ),
         }}
-        name="Home"
+        name="HomeTab"
         component={Home}
       ></Tab.Screen>
       <Tab.Screen
@@ -70,20 +76,25 @@ function HomePage() {
   );
 }
 
-export default function App() {
+export default function App({ route, navigation }) {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName={"Blossom"}
-      >
-        {/* <Stack.Screen name="BottomTab" component={HomePage}></Stack.Screen> */}
-        <Stack.Screen name="Blossom" component={Blossom}></Stack.Screen>
-        <Stack.Screen name="Login" component={Login}></Stack.Screen>
-        <Stack.Screen name="Home" component={HomePage}></Stack.Screen>
-        <Stack.Screen name="Register" component={Register}></Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{ headerShown: false }}
+          initialRouteName={"Login"}
+        >
+          {/* <Stack.Screen name="BottomTab" component={HomePage}></Stack.Screen> */}
+          <Stack.Screen name="Blossom" component={Blossom}></Stack.Screen>
+          <Stack.Screen name="Login" component={Login}></Stack.Screen>
+          <Stack.Screen name="Register" component={Register}></Stack.Screen>
+          <Stack.Screen
+            name="Home"
+            component={() => <HomePage route={route}></HomePage>}
+          ></Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

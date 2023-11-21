@@ -12,7 +12,7 @@ const Blossom = ({ navigation }) => {
       <Text style={styles.text1}>Do you want to be</Text>
       <Text style={styles.text2}>more productive?</Text>
       <TouchableOpacity
-        onPress={() => navigation.navigate("Login")}
+        onPress={() => navigation.navigate("Register")}
         style={styles.button}
       >
         <Text style={styles.buttonText}>Start your journey</Text>
