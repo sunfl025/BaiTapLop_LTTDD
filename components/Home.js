@@ -62,6 +62,23 @@ const Home = () => {
             />
           </View>
         </View>
+
+        <View style={styles.groupCheck}>
+          <View style={styles.groupCheck1}>
+            <input type="checkbox" style={styles.checkbox} />
+            <Text style={styles.textCheck}>Go for a walk</Text>
+          </View>
+
+          <View style={styles.groupCheck2}>
+            <View style={styles.dayView}>
+              <Text style={styles.textDay}>Today</Text>
+            </View>
+            <Image
+              style={styles.imgVector}
+              source={require("../assets/Vector.png")}
+            />
+          </View>
+        </View>
       </ScrollView>
     </View>
   );
