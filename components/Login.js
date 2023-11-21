@@ -20,6 +20,7 @@ const Login = ({ navigation }) => {
   const isFocused = useIsFocused();
   const userStore = useSelector(state => state);
   const dispatch = useDispatch();
+  const [isHidden,setIsHidden] = useState(true);
 
   // const getData = async () => {
   //   try {
@@ -113,11 +114,14 @@ const Login = ({ navigation }) => {
         <Text style={styles.text2}>PASSWORD</Text>
         <View style={styles.group2}>
           <TextInput
+            secureTextEntry={isHidden}
             style={styles.input2}
             value={password}
             onChangeText={(password) => setPassword(password)}
           ></TextInput>
-          <Image style={styles.icon1} source={require("../assets/icon1.png")} />
+          <TouchableOpacity onPress={()=> {setIsHidden(!isHidden)}}>
+              <Image style={styles.icon1} source={require("../assets/icon1.png")} />
+          </TouchableOpacity>
         </View>
       </View>
 

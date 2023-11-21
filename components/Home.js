@@ -15,6 +15,9 @@ const Home = ({route,navigation}) => {
 
   // const [data,setData] = useState([]);
   const [task,setTask] = useState([]);
+  const [name,setName] = useState("");
+  const [isCompleted,setIsCompleted] = useState(false)
+
   const isFocused = useIsFocused();
   // const routeState = useRoute();
   // const data = route.params;
@@ -31,6 +34,35 @@ const Home = ({route,navigation}) => {
       
     }
   }
+
+  
+  
+  const save = (id) => {
+    try {
+      const response = fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" + id + "/Task",{
+        method:"POST",
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+      
+          "name":name,
+          "isCompleted":isCompleted,
+          "UserId":id
+           
+           
+        }),
+       
+      });
+
+      
+     
+    } catch (error) {
+      console.error(error);
+    } 
+  };
+  
   useEffect(()=> {
    
     getTask(userStore.authen.user.id);
