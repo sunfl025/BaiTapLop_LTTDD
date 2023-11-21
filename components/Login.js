@@ -11,12 +11,16 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from "../redux/userStore";
 const Login = ({ navigation }) => {
   const [data, setData] = useState([]);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("Jamel.Feest@gmail.com");
+  const [password, setPassword] = useState("Flwr3n_d0A5bwE2");
   const isFocused = useIsFocused();
+  const userStore = useSelector(state => state);
+  const dispatch = useDispatch();
+
   // const getData = async () => {
   //   try {
   //     const res = await fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User")
@@ -48,6 +52,30 @@ const Login = ({ navigation }) => {
   //       // handle error
   //     });
   // };
+  const login = async () =>{
+    const response = await fetch('https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User',{
+        method: "GET",
+        headers: { "content-type": "application/json" },
+      });
+      const json = await response.json();
+      setData(json);
+      json.map((item)=> {
+                     
+        if(item.email == email && item.password == password)
+        {
+         
+          // navigation.push('Home',item)
+          // localStorage.setItem("user",JSON.stringify(item))
+          dispatch(setUser(item))
+          navigation.navigate("Home")
+
+        }
+        else{
+         //  alert("Thông tin không chính xác")
+        }
+})
+  
+  }
   const getData = async () => {
     try {
       const response = await fetch('https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User',{
@@ -65,7 +93,7 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     getData();
   }, [isFocused]);
-      console.log(data);
+      // console.log(data);
 
   return (
     <View style={styles.container}>
@@ -99,26 +127,7 @@ const Login = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          data
-            .filter((item) => {
-              return item.email == email && item.password == password;
-            })
-            .map((item) => {
-                navigation.navigate('Home',item)
-            });
-          //           data.map((item)=> {
-          //             console.log(item)
-          //              if(item.email == email && item.password == password)
-          //              {
-          //                navigation.navigate('Home',item)
-
-          //              }
-          //              else{
-          //               //  alert("Thông tin không chính xác")
-          //              }
-          // })
-        }}
+        onPress={ ()=> {login()}}
       >
         <Text style={styles.textbutton}>LOG IN</Text>
       </TouchableOpacity>

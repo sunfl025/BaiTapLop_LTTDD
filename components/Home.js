@@ -9,17 +9,20 @@ import {
 import React, { useEffect, useState } from "react";
 import { Checkbox } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
-
-const Home = ({navigation,route}) => {
+import { useRoute } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+const Home = ({route,navigation}) => {
 
   // const [data,setData] = useState([]);
   const [task,setTask] = useState([]);
   const isFocused = useIsFocused();
-  const data = [route.params];
-  console.log("data",data)
-  const getTask =  async ()=> {
+  // const routeState = useRoute();
+  // const data = route.params;
+  const userStore = useSelector(state => state)
+  console.log("userStore",userStore)
+  const getTask =  async (id)=> {
     try {
-      const res = await fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/1/Task");
+      const res = await fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" + id + "/Task");
       const json = await res.json();
       setTask(json)
    
@@ -28,22 +31,20 @@ const Home = ({navigation,route}) => {
       
     }
   }
-  // useEffect(()=> {
+  useEffect(()=> {
    
-  //   getTask();
-  // },[isFocused])
+    getTask(userStore.authen.user.id);
+  },[isFocused])
   return (
     <View style={styles.container}>
-      <Image
+      {/* <Image
         style={styles.bars}
         source={require("../assets/bars-3-bottom-left.png")}
-      />
+      /> */}
       <View style={styles.groupText}>
-        {data.map((item)=> {
-           console.log(item)
-        })}
-        <Text style={styles.text1}>Good morning Om,</Text>
-        <Text style={styles.text1}>It’s Wednesday, Jan 20 - 5 tasks</Text>
+     
+        <Text style={styles.text1}>Good morning {userStore.authen.user.name},</Text>
+        <Text style={styles.text1}>It’s {Date()} - {task.length} tasks</Text>
       </View>
 
       <View style={styles.groupTI}>
@@ -54,8 +55,11 @@ const Home = ({navigation,route}) => {
       </View>
 
     {task.map((item)=> {
+      // console.log(item)
          return(
           <ScrollView key={item.id}>
+
+            
            
     
            <View style={styles.groupCheck}>

@@ -10,12 +10,12 @@ import {
 import React,{useEffect, useState} from "react";
 import { useIsFocused } from "@react-navigation/native";
 
-const Register = ({ navigation }) => {
+const Register = ({route, navigation }) => {
   const [name,setName] = useState("");
   const [password,setPassword] = useState("");
   const [email,setEmail] = useState("");
   const isFocused = useIsFocused();
-
+console.log(route)
 
   const save = () => {
     try {
