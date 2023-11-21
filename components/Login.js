@@ -11,15 +11,16 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../redux/userStore";
 const Login = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [email, setEmail] = useState("Jamel.Feest@gmail.com");
   const [password, setPassword] = useState("Flwr3n_d0A5bwE2");
   const isFocused = useIsFocused();
-  const userStore = useSelector(state => state);
+  const userStore = useSelector((state) => state);
   const dispatch = useDispatch();
+  const [isHidden, setIsHidden] = useState(true);
 
   // const getData = async () => {
   //   try {
@@ -52,48 +53,46 @@ const Login = ({ navigation }) => {
   //       // handle error
   //     });
   // };
-  const login = async () =>{
-    const response = await fetch('https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User',{
+  const login = async () => {
+    const response = await fetch(
+      "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User",
+      {
         method: "GET",
         headers: { "content-type": "application/json" },
-      });
-      const json = await response.json();
-      setData(json);
-      json.map((item)=> {
-                     
-        if(item.email == email && item.password == password)
-        {
-         
-          // navigation.push('Home',item)
-          // localStorage.setItem("user",JSON.stringify(item))
-          dispatch(setUser(item))
-          navigation.navigate("Home")
-
-        }
-        else{
-         //  alert("Thông tin không chính xác")
-        }
-})
-  
-  }
+      }
+    );
+    const json = await response.json();
+    setData(json);
+    json.map((item) => {
+      if (item.email == email && item.password == password) {
+        // navigation.push('Home',item)
+        // localStorage.setItem("user",JSON.stringify(item))
+        dispatch(setUser(item));
+        navigation.navigate("Home");
+      } else {
+        //  alert("Thông tin không chính xác")
+      }
+    });
+  };
   const getData = async () => {
     try {
-      const response = await fetch('https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User',{
-        method: "GET",
-        headers: { "content-type": "application/json" },
-      });
+      const response = await fetch(
+        "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User",
+        {
+          method: "GET",
+          headers: { "content-type": "application/json" },
+        }
+      );
       const json = await response.json();
       setData(json);
-
-     
     } catch (error) {
       console.error(error);
-    } 
+    }
   };
   useEffect(() => {
     getData();
   }, [isFocused]);
-      // console.log(data);
+  // console.log(data);
 
   return (
     <View style={styles.container}>
@@ -113,23 +112,35 @@ const Login = ({ navigation }) => {
         <Text style={styles.text2}>PASSWORD</Text>
         <View style={styles.group2}>
           <TextInput
+            secureTextEntry={isHidden}
             style={styles.input2}
             value={password}
             onChangeText={(password) => setPassword(password)}
           ></TextInput>
-          <Image style={styles.icon1} source={require("../assets/icon1.png")} />
+          <TouchableOpacity
+            onPress={() => {
+              setIsHidden(!isHidden);
+            }}
+          >
+            <Image
+              style={styles.icon1}
+              source={require("../assets/icon1.png")}
+            />
+          </TouchableOpacity>
         </View>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-        <Text style={styles.text3}>Forgot password?</Text>
-      </TouchableOpacity>
-
       <TouchableOpacity
         style={styles.button}
-        onPress={ ()=> {login()}}
+        onPress={() => {
+          login();
+        }}
       >
         <Text style={styles.textbutton}>LOG IN</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        <Text style={styles.text3}>create an account</Text>
       </TouchableOpacity>
     </View>
   );
@@ -170,6 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: "29px",
 
     outlineStyle: "none",
+    padding: 20,
   },
   group2: {
     flexDirection: "row",
@@ -192,15 +204,17 @@ const styles = StyleSheet.create({
     outlineStyle: "none",
     textAlign: "justify",
     //backgroundColor: "red",
+    padding: 20,
   },
   text3: {
-    fontSize: "12px",
+    fontSize: "14px",
     fontFamily: "Nunito",
     fontWeight: "500",
     lineHeight: "16.37px",
     color: "#007AFF",
-    marginTop: 16,
-    marginLeft: "290px",
+    marginTop: 12,
+    //marginLeft: "290px",
+    textAlign: "center",
   },
   textbutton: {
     fontSize: "17px",
@@ -217,6 +231,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#007AFF",
     borderRadius: "29px",
     marginLeft: "8px",
-    marginTop: "20px",
+    marginTop: "40px",
   },
 });
