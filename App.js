@@ -45,7 +45,7 @@ function HomePage({ route, navigation }) {
             />
           ),
         }}
-        name="Today"
+        name="uncompleted"
         component={Today}
       ></Tab.Screen>
       <Tab.Screen

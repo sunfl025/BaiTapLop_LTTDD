@@ -14,6 +14,9 @@ import { useIsFocused } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox } from "react-native-paper";
+
+import { setTasks } from "../redux/taskStore";
+
 const Home = ({ route, navigation }) => {
   const [count, setCount] = useState(1);
   // const [data,setData] = useState([]);
@@ -21,6 +24,7 @@ const Home = ({ route, navigation }) => {
 
   const [name, setName] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
+  const dispatch = useDispatch();
 
   const isFocused = useIsFocused();
   // const routeState = useRoute();
@@ -38,6 +42,9 @@ const Home = ({ route, navigation }) => {
       );
       const json = await response.json();
       setTask(json);
+
+      dispatch(setTasks(json));
+      // console.log("task",userStore);
     } catch (error) {
       console.error(error);
     }
@@ -77,8 +84,9 @@ const Home = ({ route, navigation }) => {
         {
           method: "DELETE",
         }
-      );
-      getTask(id_user);
+      ).then((task) => {
+        getTask(id_user);
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -86,14 +94,20 @@ const Home = ({ route, navigation }) => {
     }
   };
 
-  const setNewCompleted = (id, newIsCompleted) => {
-    fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/1/Task/" + id, {
-      method: "PUT", // or PATCH
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        isCompleted: newIsCompleted,
-      }),
-    })
+  const setNewCompleted = (user_id, id, newIsCompleted) => {
+    fetch(
+      "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" +
+        user_id +
+        "/Task/" +
+        id,
+      {
+        method: "PUT", // or PATCH
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          isCompleted: newIsCompleted,
+        }),
+      }
+    )
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -101,7 +115,7 @@ const Home = ({ route, navigation }) => {
         // handle error
       })
       .then((task) => {
-        getTask(1);
+        getTask(user_id);
       })
       .catch((error) => {
         // handle error
@@ -154,7 +168,11 @@ const Home = ({ route, navigation }) => {
                   style={styles.checkbox}
                   value={item.isCompleted}
                   onValueChange={() =>
-                    setNewCompleted(item.id, !item.isCompleted)
+                    setNewCompleted(
+                      userStore.authen.user.id,
+                      item.id,
+                      !item.isCompleted
+                    )
                   }
                 ></CheckBox>
                 {/* <input   style={styles.checkbox}  /> */}
@@ -165,10 +183,14 @@ const Home = ({ route, navigation }) => {
                 <View style={styles.dayView}>
                   <Text style={styles.textDay}>Jan 28</Text>
                 </View>
-                <Image
-                  style={styles.imgVector}
-                  source={require("../assets/x-png-icon-27.jpg")}
-                />
+                <TouchableOpacity
+                  onPress={() => remove(userStore.authen.user.id, item.id)}
+                >
+                  <Image
+                    style={styles.imgVector}
+                    source={require("../assets/x-png-icon-27.jpg")}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           );

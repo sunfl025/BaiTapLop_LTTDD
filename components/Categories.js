@@ -6,12 +6,66 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Checkbox } from "react-native-paper";
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 const Categories = () => {
+ 
+  const [task,setTask] = useState();
   const userStore = useSelector(state => state)
-  console.log("from categories",userStore)
+  const isFocused = useIsFocused();
+  console.log("from categories",userStore.task.tasks)
+
+  const [taskCompleted, settaskCompleted] = useState([]);
+  const getTaskCompleted = async (id) => {
+    try {
+      const url = new URL(
+        "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" + id + "/Task"
+      );
+      url.searchParams.append("isCompleted", "true");
+      const response = await fetch(url, {
+        method: "GET",
+        headers: { "content-type": "application/json" },
+      });
+      const json = await response.json();
+      settaskCompleted(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+  const [taskUnCompleted, settaskUnCompleted] = useState([]);
+  const getTaskUnCompleted = async (id) => {
+    try {
+      const url = new URL(
+        "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" + id + "/Task"
+      );
+      url.searchParams.append("isCompleted", "false");
+      const response = await fetch(url, {
+        method: "GET",
+        headers: { "content-type": "application/json" },
+      });
+      const json = await response.json();
+      settaskUnCompleted(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getTaskUnCompleted(userStore.authen.user.id);
+  }, [isFocused]);
+  useEffect(() => {
+    getTaskCompleted(userStore.authen.user.id);
+
+  }, [isFocused]);
+  // console.log("from categories",userStore.task.tasks.isCompleted)
+//   const count = (keyWord)=> {
+//     var newArr = userStore.task.tasks.
+//     setState([...newArr])
+//  }
   return (
     <View style={styles.container}>
       <Image
@@ -29,12 +83,31 @@ const Categories = () => {
               style={styles.iconCa}
               source={require("../assets/iconCa1.png")}
             />
-            <Text style={styles.textCheck}>Weekly goals</Text>
+            <Text style={styles.textCheck}>Completed</Text>
           </View>
 
           <View style={styles.groupCheck2}>
             <View style={styles.dayView}>
-              <Text style={styles.textDay}>1</Text>
+              <Text style={styles.textDay}>
+              {/* {console.log("from categorie 2",userStore.task.tasks.isCompleted)} */}
+                {/* {userStore.task.tasks.map((item)=>{
+                  var newArray = userStore.task.tasks.filter((item) => {
+                      return item.isCompleted == true
+                  })
+                  setTask([...newArray])
+                    
+                })} */}
+
+                
+                     
+                     {/* {taskCompleted.map((item) => {
+                     
+                      console.log(taskCompleted.length);
+                    })} */}
+                 {taskCompleted.length}
+               
+                  
+                </Text>
             </View>
             <Image
               style={styles.imgVector}
@@ -49,12 +122,12 @@ const Categories = () => {
               style={styles.iconCa}
               source={require("../assets/iconCa2.png")}
             />
-            <Text style={styles.textCheck}>Personal</Text>
+            <Text style={styles.textCheck}>Uncompleted</Text>
           </View>
 
           <View style={styles.groupCheck2}>
             <View style={styles.dayView}>
-              <Text style={styles.textDay}>2</Text>
+              <Text style={styles.textDay}> {taskUnCompleted.length}</Text>
             </View>
             <Image
               style={styles.imgVector}
@@ -63,25 +136,7 @@ const Categories = () => {
           </View>
         </View>
 
-        <View style={styles.groupCheck}>
-          <View style={styles.groupCheck1}>
-            <Image
-              style={styles.iconCa}
-              source={require("../assets/iconCa3.png")}
-            />
-            <Text style={styles.textCheck}>Study</Text>
-          </View>
-
-          <View style={styles.groupCheck2}>
-            <View style={styles.dayView}>
-              <Text style={styles.textDay}>3</Text>
-            </View>
-            <Image
-              style={styles.imgVector}
-              source={require("../assets/Vector.png")}
-            />
-          </View>
-        </View>
+       
       </ScrollView>
     </View>
   );

@@ -15,6 +15,7 @@ const Register = ({route, navigation }) => {
   const [password,setPassword] = useState("");
   const [email,setEmail] = useState("");
   const isFocused = useIsFocused();
+  const [isHidden, setIsHidden] = useState(true);
 console.log(route)
 
   const save = () => {
@@ -75,16 +76,20 @@ console.log(route)
       <View style={styles.group}>
         <Text style={styles.text2}>PASSWORD</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input2} placeholder="Password" value={password} onChangeText={(password)=> setPassword(password)}></TextInput>
-          <Image style={styles.icon1} source={require("../assets/icon1.png")} />
+          <TextInput style={styles.input2} secureTextEntry={isHidden} placeholder="Password" value={password} onChangeText={(password)=> setPassword(password)}></TextInput>
+         <TouchableOpacity onPress={()=>setIsHidden(!isHidden)}>
+             <Image style={styles.icon1} source={require("../assets/icon1.png")} />
+         </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.group}>
         <Text style={styles.text2}>CONFIRM PASSWORD</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input2} placeholder="Re-password"></TextInput>
-          <Image style={styles.icon1} source={require("../assets/icon1.png")} />
+          <TextInput style={styles.input2} secureTextEntry={isHidden} placeholder="Re-password"></TextInput>
+          <TouchableOpacity onPress={()=>setIsHidden(!isHidden)}>
+             <Image style={styles.icon1} source={require("../assets/icon1.png")} />
+         </TouchableOpacity>
         </View>
       </View>
 
