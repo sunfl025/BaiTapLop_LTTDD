@@ -15,8 +15,10 @@ import { useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox } from "react-native-paper";
 const Home = ({ route, navigation }) => {
+  const [count, setCount] = useState(1);
   // const [data,setData] = useState([]);
   const [task, setTask] = useState([]);
+
   const [name, setName] = useState("");
   const [isCompleted, setIsCompleted] = useState(false);
 
