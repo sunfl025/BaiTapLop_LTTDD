@@ -6,15 +6,20 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  CheckBox,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Checkbox } from "react-native-paper";
+
 import { useIsFocused } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
+import { Checkbox } from "react-native-paper";
 const Home = ({ route, navigation }) => {
   // const [data,setData] = useState([]);
   const [task, setTask] = useState([]);
+  const [name, setName] = useState("");
+  const [isCompleted, setIsCompleted] = useState(false);
+
   const isFocused = useIsFocused();
   // const routeState = useRoute();
   // const data = route.params;
@@ -22,15 +27,85 @@ const Home = ({ route, navigation }) => {
   console.log("userStore", userStore);
   const getTask = async (id) => {
     try {
-      const res = await fetch(
-        "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" + id + "/Task"
+      const response = await fetch(
+        "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" + id + "/Task",
+        {
+          method: "GET",
+          headers: { "content-type": "application/json" },
+        }
       );
-      const json = await res.json();
+      const json = await response.json();
       setTask(json);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+
+  const save = (id) => {
+    try {
+      const response = fetch(
+        "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" + id + "/Task",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            isCompleted: false,
+            UserId: id,
+          }),
+        }
+      ).then((task) => {
+        getTask(id);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const remove = async (id_user, id) => {
+    try {
+      const response = await fetch(
+        "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" +
+          id_user +
+          "/Task/" +
+          id,
+        {
+          method: "DELETE",
+        }
+      );
+      getTask(id_user);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const setNewCompleted = (id, newIsCompleted) => {
+    fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/1/Task/" + id, {
+      method: "PUT", // or PATCH
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        isCompleted: newIsCompleted,
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        // handle error
+      })
+      .then((task) => {
+        getTask(1);
+      })
+      .catch((error) => {
+        // handle error
+      });
+  };
+
   useEffect(() => {
     getTask(userStore.authen.user.id);
   }, [isFocused]);
@@ -53,8 +128,15 @@ const Home = ({ route, navigation }) => {
         <TextInput
           style={styles.textInput}
           placeholder="Create a new task"
+          value={name}
+          onChangeText={(name) => setName(name)}
         ></TextInput>
-        <TouchableOpacity style={styles.buttonInput}>
+        <TouchableOpacity
+          style={styles.buttonInput}
+          onPress={() => {
+            save(userStore.authen.user.id);
+          }}
+        >
           <Text style={styles.textButtonInput}>Add</Text>
         </TouchableOpacity>
       </View>
@@ -65,7 +147,15 @@ const Home = ({ route, navigation }) => {
           return (
             <View style={styles.groupCheck}>
               <View style={styles.groupCheck1}>
-                <input type="checkbox" style={styles.checkbox} />
+                <CheckBox
+                  // type="checkbox"
+                  style={styles.checkbox}
+                  value={item.isCompleted}
+                  onValueChange={() =>
+                    setNewCompleted(item.id, !item.isCompleted)
+                  }
+                ></CheckBox>
+                {/* <input   style={styles.checkbox}  /> */}
                 <Text style={styles.textCheck}>{item.name}</Text>
               </View>
 
@@ -75,7 +165,7 @@ const Home = ({ route, navigation }) => {
                 </View>
                 <Image
                   style={styles.imgVector}
-                  source={require("../assets/Vector.png")}
+                  source={require("../assets/x-png-icon-27.jpg")}
                 />
               </View>
             </View>
@@ -145,8 +235,9 @@ const styles = StyleSheet.create({
     marginTop: "20px",
   },
   checkbox: {
-    width: 30,
-    height: 30,
+    width: 24,
+    height: 24,
+    marginLeft: 10,
   },
   groupCheck: {
     flexDirection: "row",
@@ -191,8 +282,8 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   imgVector: {
-    width: "3.25px",
-    height: "13.25px",
+    width: "10.25px",
+    height: "10.25px",
     marginLeft: 15,
     marginTop: 5,
   },
