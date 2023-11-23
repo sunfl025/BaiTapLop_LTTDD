@@ -6,8 +6,7 @@ import {
   TextInput,
   ScrollView,
   CheckBox,
-  TouchableOpacity
-  
+  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { Checkbox } from "react-native-paper";
@@ -15,8 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTasks } from "../redux/taskStore";
 
 const Completed = () => {
-  const userStore = useSelector(state => state)
-  console.log("from completed",userStore)
+  const userStore = useSelector((state) => state);
+  console.log("from completed", userStore);
   const [task, setTask] = useState([]);
   const dispatch = useDispatch();
 
@@ -32,7 +31,7 @@ const Completed = () => {
       const json = await response.json();
       setTask(json);
 
-      dispatch(setTasks(json))
+      dispatch(setTasks(json));
       // console.log("task",userStore);
     } catch (error) {
       console.error(error);
@@ -48,27 +47,29 @@ const Completed = () => {
         {
           method: "DELETE",
         }
-      ).then(
-        (task)=>{
-          getTask(id_user);
-        }
-        
-      );
-    
+      ).then((task) => {
+        getTask(id_user);
+      });
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
-  const setNewCompleted = (user_id,id, newIsCompleted) => {
-    fetch("https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/"+ user_id + "/Task/" + id, {
-      method: "PUT", // or PATCH
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        isCompleted: newIsCompleted,
-      }),
-    })
+  const setNewCompleted = (user_id, id, newIsCompleted) => {
+    fetch(
+      "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" +
+        user_id +
+        "/Task/" +
+        id,
+      {
+        method: "PUT", // or PATCH
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          isCompleted: newIsCompleted,
+        }),
+      }
+    )
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -92,46 +93,48 @@ const Completed = () => {
         <Text style={styles.text1}>Completed</Text>
       </View>
 
-     
       <ScrollView>
-          {
-              userStore.task.tasks.map((item)=> {
-                  if(item.isCompleted==true){
-                    return (
-                      <View style={styles.groupCheck}>
-                        <View style={styles.groupCheck1}>
-                          <CheckBox
-                            // type="checkbox"
-                            style={styles.checkbox}
-                            value={item.isCompleted}
-                            onValueChange={() =>
-                              setNewCompleted(userStore.authen.user.id,item.id, !item.isCompleted)
-                            }
-                          ></CheckBox>
-                          {/* <input   style={styles.checkbox}  /> */}
-                          <Text style={styles.textCheck}>{item.name}</Text>
-                        </View>
-          
-                        <View style={styles.groupCheck2}>
-                          <View style={styles.dayView}>
-                            <Text style={styles.textDay}>Jan 28</Text>
-                          </View>
-                         <TouchableOpacity onPress={()=>{remove(userStore.authen.user.id,item.id)}}>
-                          <Image
-                              style={styles.imgVector}
-                              source={require("../assets/x-png-icon-27.jpg")}
-                            />
-                         </TouchableOpacity>
-                        </View>
-                      </View>
-                    );
-                  }
-              })
+        {userStore.task.tasks.map((item) => {
+          if (item.isCompleted == true) {
+            return (
+              <View style={styles.groupCheck}>
+                <View style={styles.groupCheck1}>
+                  <CheckBox
+                    // type="checkbox"
+                    style={styles.checkbox}
+                    value={item.isCompleted}
+                    onValueChange={() =>
+                      setNewCompleted(
+                        userStore.authen.user.id,
+                        item.id,
+                        !item.isCompleted
+                      )
+                    }
+                  ></CheckBox>
+                  {/* <input   style={styles.checkbox}  /> */}
+                  <Text style={styles.textCheck}>{item.name}</Text>
+                </View>
+
+                <View style={styles.groupCheck2}>
+                  <View style={styles.dayView}>
+                    <Text style={styles.textDay}>Nov 24</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      remove(userStore.authen.user.id, item.id);
+                    }}
+                  >
+                    <Image
+                      style={styles.imgVector}
+                      source={require("../assets/x-png-icon-27.jpg")}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            );
           }
-
-       
+        })}
       </ScrollView>
-
     </View>
   );
 };
@@ -248,6 +251,5 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 });
-
 
 export default Completed;

@@ -17,7 +17,6 @@ const Stack = createNativeStackNavigator();
 // const Tab = createMaterialBottomTabNavigator()
 const Tab = createBottomTabNavigator();
 function HomePage({ route, navigation }) {
-
   return (
     <Tab.Navigator
       initialRouteName="HomeTab"
@@ -82,7 +81,7 @@ export default function App({ route, navigation }) {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{ headerShown: false }}
-          initialRouteName={"Login"}
+          initialRouteName={"Blossom"}
         >
           {/* <Stack.Screen name="BottomTab" component={HomePage}></Stack.Screen> */}
           <Stack.Screen name="Blossom" component={Blossom}></Stack.Screen>

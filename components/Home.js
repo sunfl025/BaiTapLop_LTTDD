@@ -181,7 +181,7 @@ const Home = ({ route, navigation }) => {
 
               <View style={styles.groupCheck2}>
                 <View style={styles.dayView}>
-                  <Text style={styles.textDay}>Jan 28</Text>
+                  <Text style={styles.textDay}>Nov 24</Text>
                 </View>
                 <TouchableOpacity
                   onPress={() => remove(userStore.authen.user.id, item.id)}

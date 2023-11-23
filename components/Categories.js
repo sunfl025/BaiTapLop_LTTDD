@@ -8,15 +8,14 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import { Checkbox } from "react-native-paper";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 const Categories = () => {
- 
-  const [task,setTask] = useState();
-  const userStore = useSelector(state => state)
+  const [task, setTask] = useState();
+  const userStore = useSelector((state) => state);
   const isFocused = useIsFocused();
-  console.log("from categories",userStore.task.tasks)
+  console.log("from categories", userStore.task.tasks);
 
   const [taskCompleted, settaskCompleted] = useState([]);
   const getTaskCompleted = async (id) => {
@@ -35,7 +34,6 @@ const Categories = () => {
       console.error(error);
     }
   };
-  
 
   const [taskUnCompleted, settaskUnCompleted] = useState([]);
   const getTaskUnCompleted = async (id) => {
@@ -59,13 +57,12 @@ const Categories = () => {
   }, [isFocused]);
   useEffect(() => {
     getTaskCompleted(userStore.authen.user.id);
-
   }, [isFocused]);
   // console.log("from categories",userStore.task.tasks.isCompleted)
-//   const count = (keyWord)=> {
-//     var newArr = userStore.task.tasks.
-//     setState([...newArr])
-//  }
+  //   const count = (keyWord)=> {
+  //     var newArr = userStore.task.tasks.
+  //     setState([...newArr])
+  //  }
   return (
     <View style={styles.container}>
       <Image
@@ -81,7 +78,7 @@ const Categories = () => {
           <View style={styles.groupCheck1}>
             <Image
               style={styles.iconCa}
-              source={require("../assets/iconCa1.png")}
+              source={require("../assets/pngwing.com (2).png")}
             />
             <Text style={styles.textCheck}>Completed</Text>
           </View>
@@ -89,7 +86,7 @@ const Categories = () => {
           <View style={styles.groupCheck2}>
             <View style={styles.dayView}>
               <Text style={styles.textDay}>
-              {/* {console.log("from categorie 2",userStore.task.tasks.isCompleted)} */}
+                {/* {console.log("from categorie 2",userStore.task.tasks.isCompleted)} */}
                 {/* {userStore.task.tasks.map((item)=>{
                   var newArray = userStore.task.tasks.filter((item) => {
                       return item.isCompleted == true
@@ -98,16 +95,12 @@ const Categories = () => {
                     
                 })} */}
 
-                
-                     
-                     {/* {taskCompleted.map((item) => {
+                {/* {taskCompleted.map((item) => {
                      
                       console.log(taskCompleted.length);
                     })} */}
-                 {taskCompleted.length}
-               
-                  
-                </Text>
+                {taskCompleted.length}
+              </Text>
             </View>
             <Image
               style={styles.imgVector}
@@ -120,7 +113,7 @@ const Categories = () => {
           <View style={styles.groupCheck1}>
             <Image
               style={styles.iconCa}
-              source={require("../assets/iconCa2.png")}
+              source={require("../assets/pngwing.com (1).png")}
             />
             <Text style={styles.textCheck}>Uncompleted</Text>
           </View>
@@ -135,8 +128,6 @@ const Categories = () => {
             />
           </View>
         </View>
-
-       
       </ScrollView>
     </View>
   );
@@ -224,7 +215,7 @@ const styles = StyleSheet.create({
     borderRadius: "10px",
   },
   textDay: {
-    fontSize: "10px",
+    fontSize: "13px",
     lineHeight: "13.64px",
     textAlign: "center",
     color: "#838288",
@@ -239,8 +230,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   iconCa: {
-    width: "15px",
-    height: "15px",
+    width: "20px",
+    height: "20px",
     marginTop: 5,
     marginLeft: 10,
   },
