@@ -106,6 +106,8 @@ const Login = ({ navigation }) => {
             onChangeText={(email) => setEmail(email)}
           ></TextInput>
         </View>
+        {email=="" ? ( <Text style={{color:"red",marginLeft:20}}>Enter email</Text>):(<Text style={{color:"red",marginLeft:20}}></Text>)
+        }
       </View>
 
       <View style={styles.group}>
@@ -128,12 +130,20 @@ const Login = ({ navigation }) => {
             />
           </TouchableOpacity>
         </View>
+        {password=="" ? ( <Text style={{color:"red",marginLeft:20}}>Enter Password</Text>):(<Text style={{color:"red",marginLeft:20}}></Text>)
+        }
       </View>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          login();
+          if(!(email==""&& password==""))
+          {
+            login();
+          }
+          else{
+             console.log("invalid")
+          }
         }}
       >
         <Text style={styles.textbutton}>LOG IN</Text>

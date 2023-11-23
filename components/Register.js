@@ -14,6 +14,7 @@ const Register = ({route, navigation }) => {
   const [name,setName] = useState("");
   const [password,setPassword] = useState("");
   const [email,setEmail] = useState("");
+  const [passwordConfirm,setPasswordConfirm]= useState("")
   const isFocused = useIsFocused();
   const [isHidden, setIsHidden] = useState(true);
 console.log(route)
@@ -68,7 +69,10 @@ console.log(route)
         <Text style={styles.text2}>E-MAIL</Text>
         <View style={styles.group2}>
           <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={(email)=> setEmail(email)}></TextInput>
+          
         </View>
+        {email=="" ? ( <Text style={{color:"red",marginLeft:20}}>Enter email</Text>):(<Text style={{color:"red",marginLeft:20}}></Text>)
+        }
       </View>
 
 
@@ -81,20 +85,36 @@ console.log(route)
              <Image style={styles.icon1} source={require("../assets/icon1.png")} />
          </TouchableOpacity>
         </View>
+        {password=="" ? ( <Text style={{color:"red",marginLeft:20}}>Enter password</Text>):(<Text style={{color:"red",marginLeft:20}}></Text>)
+        }
       </View>
 
       <View style={styles.group}>
         <Text style={styles.text2}>CONFIRM PASSWORD</Text>
         <View style={styles.group2}>
-          <TextInput style={styles.input2} secureTextEntry={isHidden} placeholder="Re-password"></TextInput>
+          <TextInput style={styles.input2} secureTextEntry={isHidden} placeholder="Re-password" value={passwordConfirm} onChangeText={(passwordConfirm)=> setPasswordConfirm(passwordConfirm)}></TextInput>
           <TouchableOpacity onPress={()=>setIsHidden(!isHidden)}>
              <Image style={styles.icon1} source={require("../assets/icon1.png")} />
          </TouchableOpacity>
+
         </View>
+        {passwordConfirm=="" ? ( <Text style={{color:"red",marginLeft:20}}>Enter re-password</Text>):
+        (passwordConfirm!=password?(<Text style={{color:"red",marginLeft:20}}>Not match the password</Text>):(<Text style={{color:"red",marginLeft:20}}></Text>))
+        }
       </View>
 
       <TouchableOpacity
-        onPress={() => {save(),navigation.navigate('Login')}}
+        onPress={() => {
+          if(!(email=="" && password=="")&& password==passwordConfirm)
+          {
+             save();
+             navigation.navigate('Login')
+          }
+          else{
+             console.log("Invalid")
+           
+          }
+         }}
         style={styles.button}
       >
         <Text style={styles.textbutton}>Register</Text>
