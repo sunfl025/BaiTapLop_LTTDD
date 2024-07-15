@@ -13,7 +13,7 @@ import { Checkbox } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { setTasks } from "../redux/taskStore";
 
-const Today = () => {
+const Completed = () => {
   const userStore = useSelector((state) => state);
   console.log("from completed", userStore);
   const [task, setTask] = useState([]);
@@ -56,7 +56,6 @@ const Today = () => {
       setLoading(false);
     }
   };
-
   const setNewCompleted = (user_id, id, newIsCompleted) => {
     fetch(
       "https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User/" +
@@ -96,7 +95,7 @@ const Today = () => {
 
       <ScrollView>
         {userStore.task.tasks.map((item) => {
-          if (item.isCompleted == false) {
+          if (item.isCompleted == true) {
             return (
               <View style={styles.groupCheck}>
                 <View style={styles.groupCheck1}>
@@ -253,4 +252,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Today;
+export default Completed;

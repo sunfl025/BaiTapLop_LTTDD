@@ -1,12 +1,214 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import React,{useEffect, useState} from "react";
+import { useIsFocused } from "@react-navigation/native";
 
-const Register = () => {
+const Register = ({route, navigation }) => {
+  const [name,setName] = useState("");
+  const [password,setPassword] = useState("");
+  const [email,setEmail] = useState("");
+  const [passwordConfirm,setPasswordConfirm]= useState("")
+  const isFocused = useIsFocused();
+  const [isHidden, setIsHidden] = useState(true);
+console.log(route)
+
+  const save = () => {
+    try {
+      const response =  fetch('https://65533ab65449cfda0f2e5ffa.mockapi.io/api/User',{
+        method:"POST",
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+      
+          "email":email,
+          "password":password,
+           
+           
+        }),
+       
+      });
+
+      
+     
+    } catch (error) {
+      console.error(error);
+    } 
+  };
+
+  // useEffect(()=> {
+  //   save()
+  // },[isFocused])    
+ 
+ 
   return (
-    <View>
-      <Text>Register</Text>
-    </View>
-  )
-}
+    
+    <View style={styles.container}>
+      <View style={styles.groupText}>
+        <Text style={styles.text1}>Welcome to Blossom!</Text>
+        <Text style={styles.text1}>Your journey starts here</Text>
+      </View>
 
-export default Register
+
+      {/* <View style={styles.group}>
+        <Text style={styles.text2}>NAME</Text>
+        <View style={styles.group2}>
+          <TextInput style={styles.input} placeholder="User name" value={name} onChangeText={(name)=> setName(name)}></TextInput>
+        </View>
+      </View> */}
+
+      <View style={styles.group}>
+        <Text style={styles.text2}>E-MAIL</Text>
+        <View style={styles.group2}>
+          <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={(email)=> setEmail(email)}></TextInput>
+          
+        </View>
+        {email=="" ? ( <Text style={{color:"red",marginLeft:20}}>Enter email</Text>):(<Text style={{color:"red",marginLeft:20}}></Text>)
+        }
+      </View>
+
+
+
+      <View style={styles.group}>
+        <Text style={styles.text2}>PASSWORD</Text>
+        <View style={styles.group2}>
+          <TextInput style={styles.input2} secureTextEntry={isHidden} placeholder="Password" value={password} onChangeText={(password)=> setPassword(password)}></TextInput>
+         <TouchableOpacity onPress={()=>setIsHidden(!isHidden)}>
+             <Image style={styles.icon1} source={require("../assets/icon1.png")} />
+         </TouchableOpacity>
+        </View>
+        {password=="" ? ( <Text style={{color:"red",marginLeft:20}}>Enter password</Text>):(<Text style={{color:"red",marginLeft:20}}></Text>)
+        }
+      </View>
+
+      <View style={styles.group}>
+        <Text style={styles.text2}>CONFIRM PASSWORD</Text>
+        <View style={styles.group2}>
+          <TextInput style={styles.input2} secureTextEntry={isHidden} placeholder="Re-password" value={passwordConfirm} onChangeText={(passwordConfirm)=> setPasswordConfirm(passwordConfirm)}></TextInput>
+          <TouchableOpacity onPress={()=>setIsHidden(!isHidden)}>
+             <Image style={styles.icon1} source={require("../assets/icon1.png")} />
+         </TouchableOpacity>
+
+        </View>
+        {passwordConfirm=="" ? ( <Text style={{color:"red",marginLeft:20}}>Enter re-password</Text>):
+        (passwordConfirm!=password?(<Text style={{color:"red",marginLeft:20}}>Not match the password</Text>):(<Text style={{color:"red",marginLeft:20}}></Text>))
+        }
+      </View>
+
+      <TouchableOpacity
+        onPress={() => {
+          if(!(email=="" && password=="")&& password==passwordConfirm)
+          {
+             save();
+             navigation.navigate('Login')
+          }
+          else{
+             console.log("Invalid")
+           
+          }
+         }}
+        style={styles.button}
+      >
+        <Text style={styles.textbutton}>Register</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default Register;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  groupText: {
+    marginLeft: "22px",
+    marginTop: "50px",
+  },
+  text1: {
+    fontSize: "20px",
+    fontFamily: "Nunito",
+    fontWeight: "700",
+    lineHeight: "27.78px",
+  },
+  group: {
+    flexDirection: "column",
+    width: "370px",
+    height: "89",
+
+    marginLeft: "8px",
+  },
+  text2: {
+    fontSize: "12px",
+    fontFamily: "Nunito",
+    fontWeight: "700",
+    lineHeight: "16.37px",
+    marginTop: 30,
+  },
+  input: {
+    width: "360px",
+    height: "54px",
+    borderRadius: "29px",
+
+    outlineStyle: "none",
+    padding:20
+  },
+  group2: {
+    flexDirection: "row",
+    border: "1px solid #3C3C4399",
+    width: "370px",
+    height: "54px",
+    borderRadius: "29px",
+    marginTop: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  icon1: {
+    width: "16px",
+    height: "16px",
+  },
+  input2: {
+    width: "340px",
+    height: "54px",
+    borderRadius: "29px",
+    outlineStyle: "none",
+    textAlign: "justify",
+    padding:20
+    //backgroundColor: "red",
+  },
+  text3: {
+    fontSize: "12px",
+    fontFamily: "Nunito",
+    fontWeight: "500",
+    lineHeight: "16.37px",
+    color: "#007AFF",
+    marginTop: 16,
+    marginLeft: "290px",
+  },
+  textbutton: {
+    fontSize: "17px",
+    fontFamily: "Nunito",
+    fontWeight: "700",
+    lineHeight: "16.37px",
+    color: "white",
+    textAlign: "center",
+    marginTop: "16px",
+  },
+  button: {
+    width: "370px",
+    height: "54px",
+    backgroundColor: "#007AFF",
+    borderRadius: "29px",
+    marginLeft: "8px",
+    marginTop: "50px",
+  },
+});
